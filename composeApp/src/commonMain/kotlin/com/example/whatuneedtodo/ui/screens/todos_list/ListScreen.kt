@@ -38,6 +38,8 @@ import com.example.whatuneedtodo.utils.Placeholders
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.stringResource
+import whatuneedtodo.composeapp.generated.resources.*
 import kotlin.math.roundToInt
 
 @Composable
@@ -80,7 +82,10 @@ fun ListScreen(
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
             ) {
-                Icon(imageVector = Icons.Default.Add, contentDescription = "Add task")
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = stringResource(Res.string.add_task_content_description)
+                )
             }
         }
     ) { innerPadding ->
@@ -96,24 +101,46 @@ fun ListScreen(
                 onSortSelected = { sendAction(Action.ChangeSortType(it)) }
             )
 
-            LazyColumn(
-                state = listState,
-                modifier = Modifier.fillMaxSize(),
-                contentPadding = PaddingValues(vertical = 8.dp)
-            ) {
-                items(
-                    items = state.itemsToShow,
-                    key = { it.id }
-                ) { item ->
-                    TodoItemRow(
-                        item = item,
-                        onDeleteRequest = { itemPendingDelete = it }
+            if (state.itemsToShow.isEmpty()) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center
+                ) {
+                    val message = if (state.searchQuery.isEmpty()) {
+                        stringResource(Res.string.empty_db_message)
+                    } else {
+                        stringResource(Res.string.empty_search_message)
+                    }
+                    Text(
+                        text = message,
+                        style = MaterialTheme.typography.bodyLarge,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(32.dp),
+                        textAlign = androidx.compose.ui.text.style.TextAlign.Center
                     )
+                }
+            } else {
+                LazyColumn(
+                    state = listState,
+                    modifier = Modifier.fillMaxSize(),
+                    contentPadding = PaddingValues(vertical = 8.dp)
+                ) {
+                    items(
+                        items = state.itemsToShow,
+                        key = { it.id }
+                    ) { item ->
+                        TodoItemRow(
+                            item = item,
+                            onDeleteRequest = { itemPendingDelete = it }
+                        )
+                    }
                 }
             }
         }
     }
 }
+
+// ... update other components in the same file ...
 
 // ─────────────────────────────────────────────
 // Search + Sort bar
@@ -136,7 +163,7 @@ private fun SearchAndSortBar(
             value = query,
             onValueChange = onQueryChange,
             modifier = Modifier.weight(1f),
-            placeholder = { Text("Search task...") },
+            placeholder = { Text(stringResource(Res.string.search_task_placeholder)) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Search,
@@ -147,7 +174,7 @@ private fun SearchAndSortBar(
             trailingIcon = {
                 if (query.isNotEmpty()) {
                     IconButton(onClick = { onQueryChange("") }) {
-                        Icon(Icons.Default.Close, contentDescription = "Clear")
+                        Icon(Icons.Default.Close, contentDescription = stringResource(Res.string.context_menu_cancel))
                     }
                 }
             },
@@ -176,7 +203,7 @@ private fun SortMenuButton(
         IconButton(onClick = { expanded = true }) {
             Icon(
                 imageVector = Icons.AutoMirrored.Filled.Sort,
-                contentDescription = "Sort",
+                contentDescription = stringResource(Res.string.sort_content_description),
                 tint = MaterialTheme.colorScheme.primary
             )
         }
@@ -209,11 +236,12 @@ private fun SortMenuButton(
 }
 
 private val SortType.label: String
+    @Composable
     get() = when (this) {
-        SortType.ByDateNewFirst -> "Newest first"
-        SortType.ByDateOldFirst -> "Oldest first"
-        SortType.ByPriorityUrgentFirst -> "Urgent first"
-        SortType.ByPriorityLowFirst -> "Low priority first"
+        SortType.ByDateNewFirst -> stringResource(Res.string.sort_newest_first)
+        SortType.ByDateOldFirst -> stringResource(Res.string.sort_oldest_first)
+        SortType.ByPriorityUrgentFirst -> stringResource(Res.string.sort_urgent_first)
+        SortType.ByPriorityLowFirst -> stringResource(Res.string.sort_low_priority_first)
     }
 
 enum class DragAnchors { Start, End }
@@ -277,7 +305,7 @@ private fun TodoItemRow(
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Delete",
+                    contentDescription = stringResource(Res.string.context_menu_delete),
                     tint = MaterialTheme.colorScheme.onErrorContainer
                 )
             }
@@ -359,10 +387,10 @@ private fun TodoItemContent(item: TodoModel) {
 @Composable
 private fun PriorityBadge(priority: TodoPriority) {
     val (label, color) = when (priority) {
-        TodoPriority.Urgent -> "Urgent" to Color(0xFFD32F2F)
+        TodoPriority.Urgent -> stringResource(Res.string.sort_urgent_first).split(" ").first() to Color(0xFFD32F2F)
         TodoPriority.High -> "High" to Color(0xFFF57C00)
         TodoPriority.Medium -> "Medium" to Color(0xFF388E3C)
-        TodoPriority.Low -> "Low" to Color(0xFF455A64)
+        TodoPriority.Low -> stringResource(Res.string.sort_low_priority_first).split(" ").first() to Color(0xFF455A64)
     }
     Surface(
         color = color.copy(alpha = 0.15f),
@@ -390,12 +418,12 @@ private fun ItemContextMenu(
 ) {
     DropdownMenu(expanded = expanded, onDismissRequest = onDismiss) {
         DropdownMenuItem(
-            text = { Text("Update") },
+            text = { Text(stringResource(Res.string.context_menu_update)) },
             leadingIcon = { Icon(Icons.Default.Edit, contentDescription = null) },
             onClick = onUpdate
         )
         DropdownMenuItem(
-            text = { Text("Delete", color = MaterialTheme.colorScheme.error) },
+            text = { Text(stringResource(Res.string.context_menu_delete), color = MaterialTheme.colorScheme.error) },
             leadingIcon = {
                 Icon(
                     imageVector = Icons.Default.Delete,
@@ -427,18 +455,18 @@ private fun DeleteConfirmationDialog(
                 tint = MaterialTheme.colorScheme.error
             )
         },
-        title = { Text("Delete task?") },
-        text = { Text("\"${item.title}\" will be permanently deleted.") },
+        title = { Text(stringResource(Res.string.delete_dialog_title)) },
+        text = { Text(stringResource(Res.string.delete_dialog_message, item.title)) },
         confirmButton = {
             Button(
                 onClick = onConfirm,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = MaterialTheme.colorScheme.error
                 )
-            ) { Text("Delete") }
+            ) { Text(stringResource(Res.string.context_menu_delete)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(Res.string.context_menu_cancel)) }
         }
     )
 }

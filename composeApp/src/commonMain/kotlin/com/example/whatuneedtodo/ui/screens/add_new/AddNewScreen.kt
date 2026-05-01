@@ -39,6 +39,8 @@ import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalFocusManager
 import com.example.whatuneedtodo.domain.model.TodoPriority
 import com.example.whatuneedtodo.ui.screens.add_new.AddNewContract.*
+import org.jetbrains.compose.resources.stringResource
+import whatuneedtodo.composeapp.generated.resources.*
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
@@ -72,10 +74,10 @@ fun AddNewScreen(state: UiState, sendAction: (Action) -> Unit, onNavAction: (Nav
                 title = it
                 sendAction(Action.CheckIfTitleAlreadyExist(it))
             },
-            label = { Text("Title") },
+            label = { Text(stringResource(Res.string.title_label)) },
             isError = state.isTitleAlreadyExist,
             supportingText = if (state.isTitleAlreadyExist) {
-                { Text("Title already exists") }
+                { Text(stringResource(Res.string.title_exists_error)) }
             } else null,
             trailingIcon = if (state.isCheckInProgress) {
                 {
@@ -94,7 +96,7 @@ fun AddNewScreen(state: UiState, sendAction: (Action) -> Unit, onNavAction: (Nav
         OutlinedTextField(
             value = description,
             onValueChange = { description = it },
-            label = { Text("Description (Optional)") },
+            label = { Text(stringResource(Res.string.description_label)) },
             modifier = Modifier.fillMaxWidth(),
             maxLines = 5
         )
@@ -109,7 +111,7 @@ fun AddNewScreen(state: UiState, sendAction: (Action) -> Unit, onNavAction: (Nav
                 value = priority.name,
                 onValueChange = {},
                 readOnly = true,
-                label = { Text("Priority") },
+                label = { Text(stringResource(Res.string.priority_label)) },
                 trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded) },
                 colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors(),
                 modifier = Modifier
@@ -139,16 +141,16 @@ fun AddNewScreen(state: UiState, sendAction: (Action) -> Unit, onNavAction: (Nav
 
         Button(
             onClick = { sendAction(Action.Apply(title, description, priority)) },
-            enabled = state.isTitleInputted && !state.isTitleAlreadyExist,
+            enabled = state.isTitleInputted && !state.isTitleAlreadyExist && !state.isSuccessfullyAdded,
             modifier = Modifier.fillMaxWidth()
         ) {
             if (state.isSuccessfullyAdded) {
                 Icon(
                     imageVector = Icons.Default.Check,
-                    contentDescription = "Successfully Added"
+                    contentDescription = stringResource(Res.string.successfully_added_description)
                 )
             } else {
-                Text("Apply")
+                Text(stringResource(Res.string.apply_button))
             }
         }
 
@@ -156,7 +158,7 @@ fun AddNewScreen(state: UiState, sendAction: (Action) -> Unit, onNavAction: (Nav
             onClick = { onNavAction(NavAction.Close) },
             modifier = Modifier.fillMaxWidth()
         ) {
-            Text("Cancel")
+            Text(stringResource(Res.string.cancel_button))
         }
     }
 }

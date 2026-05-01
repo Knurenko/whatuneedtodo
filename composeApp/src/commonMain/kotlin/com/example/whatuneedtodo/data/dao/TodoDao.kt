@@ -22,4 +22,7 @@ interface TodoDao {
 
     @Update
     suspend fun updateTodo(todo: TodoEntity)
+
+    @Query("SELECT EXISTS(SELECT 1 FROM todos WHERE title = :title)")
+    suspend fun isTitleAlreadyExist(title: String): Boolean
 }

@@ -1,0 +1,28 @@
+<resources>
+    <string name="app_name">WhatUNeedToDo</string>
+    
+    <!-- List Screen -->
+    <string name="search_task_placeholder">Search task...</string>
+    <string name="sort_content_description">Sort</string>
+    <string name="sort_newest_first">Newest first</string>
+    <string name="sort_oldest_first">Oldest first</string>
+    <string name="sort_urgent_first">Urgent first</string>
+    <string name="sort_low_priority_first">Low priority first</string>
+    <string name="context_menu_update">Update</string>
+    <string name="context_menu_delete">Delete</string>
+    <string name="context_menu_cancel">Cancel</string>
+    <string name="delete_dialog_title">Delete task?</string>
+    <string name="delete_dialog_message">%1$s will be permanently deleted.</string>
+    <string name="add_task_content_description">Add task</string>
+    <string name="empty_db_message">You don't have any tasks yet, to create a new one click on the button below</string>
+    <string name="empty_search_message">Couldn't find any task based on your query</string>
+    
+    <!-- Add New Screen -->
+    <string name="title_label">Title</string>
+    <string name="title_exists_error">Title already exists</string>
+    <string name="description_label">Description (Optional)</string>
+    <string name="priority_label">Priority</string>
+    <string name="apply_button">Apply</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="successfully_added_description">Successfully Added</string>
+</resources>
