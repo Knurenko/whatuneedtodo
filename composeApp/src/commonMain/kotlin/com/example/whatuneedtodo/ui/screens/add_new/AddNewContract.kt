@@ -1,8 +1,10 @@
 package com.example.whatuneedtodo.ui.screens.add_new
 
+import androidx.compose.runtime.Immutable
 import com.example.whatuneedtodo.domain.model.TodoPriority
 
 interface AddNewContract {
+    @Immutable
     data class UiState(
         val isTitleInputted: Boolean = false,
         val isTitleAlreadyExist: Boolean = false,

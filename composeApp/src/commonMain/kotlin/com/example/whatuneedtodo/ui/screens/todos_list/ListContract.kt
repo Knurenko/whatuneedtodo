@@ -1,8 +1,10 @@
 package com.example.whatuneedtodo.ui.screens.todos_list
 
+import androidx.compose.runtime.Immutable
 import com.example.whatuneedtodo.domain.model.TodoModel
 
 interface ListContract {
+    @Immutable
     data class UiState(
         val itemsToShow: List<TodoModel> = emptyList(),
         val searchQuery: String = "",
@@ -17,6 +19,7 @@ interface ListContract {
 
     sealed interface NavAction {
         data object NavigateToAddNew : NavAction
+        data class NavigateToEdit(val id: Int) : NavAction
     }
 
     enum class SortType {

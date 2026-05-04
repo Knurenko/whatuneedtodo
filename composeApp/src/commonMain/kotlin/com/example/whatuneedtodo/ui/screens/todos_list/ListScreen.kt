@@ -133,7 +133,8 @@ fun ListScreen(
                     ) { item ->
                         TodoItemRow(
                             item = item,
-                            onDeleteRequest = { itemPendingDelete = it }
+                            onDeleteRequest = { itemPendingDelete = it },
+                            onEditPress = { onNavAction(NavAction.NavigateToEdit(item.id)) }
                         )
                     }
                 }
@@ -252,7 +253,8 @@ enum class DragAnchors { Start, End }
 @Composable
 private fun TodoItemRow(
     item: TodoModel,
-    onDeleteRequest: (TodoModel) -> Unit
+    onDeleteRequest: (TodoModel) -> Unit,
+    onEditPress: () -> Unit
 ) {
     var showContextMenu by remember { mutableStateOf(false) }
     val density = LocalDensity.current
@@ -336,7 +338,7 @@ private fun TodoItemRow(
             onDismiss = { showContextMenu = false },
             onUpdate = {
                 showContextMenu = false
-                // TODO: onNavAction(NavAction.NavigateToEdit(item.id))
+                onEditPress()
             },
             onDelete = {
                 showContextMenu = false

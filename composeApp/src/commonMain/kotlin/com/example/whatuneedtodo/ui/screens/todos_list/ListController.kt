@@ -19,7 +19,11 @@ fun ListController() {
         onNavAction = { action ->
             when (action) {
                 ListContract.NavAction.NavigateToAddNew -> {
-                    navigation.navigate(Screen.AddNew.route)
+                    navigation.navigate(Screen.AddNew)
+                }
+
+                is ListContract.NavAction.NavigateToEdit -> {
+                    navigation.navigate(Screen.Edit(action.id))
                 }
             }
         }

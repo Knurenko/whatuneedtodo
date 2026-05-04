@@ -3,6 +3,7 @@ package com.example.whatuneedtodo.di.modules
 import com.example.whatuneedtodo.data.repo.TodoRepoImpl
 import com.example.whatuneedtodo.domain.repo.TodoRepo
 import com.example.whatuneedtodo.ui.screens.add_new.AddNewViewModel
+import com.example.whatuneedtodo.ui.screens.edit.EditViewModel
 import com.example.whatuneedtodo.ui.screens.todos_list.ListViewModel
 import org.koin.core.module.dsl.viewModelOf
 import org.koin.dsl.bind
@@ -13,4 +14,5 @@ val appModule = module {
     
     viewModelOf(::AddNewViewModel)
     viewModelOf(::ListViewModel)
+    viewModelOf(::EditViewModel)
 }

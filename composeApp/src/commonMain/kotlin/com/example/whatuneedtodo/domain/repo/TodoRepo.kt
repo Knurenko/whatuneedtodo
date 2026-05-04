@@ -10,4 +10,5 @@ interface TodoRepo {
     suspend fun removeTodo(itemToRemove: TodoModel)
     suspend fun updateTodo(itemToUpdate: TodoModel)
     suspend fun isTitleAlreadyExist(title: String): Boolean
+    suspend fun getTodoById(id: Int): TodoModel?
 }

@@ -53,4 +53,10 @@ class TodoRepoImpl(
             todoDao.isTitleAlreadyExist(title)
         }
     }
+
+    override suspend fun getTodoById(id: Int): TodoModel? {
+        return withContext(Dispatchers.IO) {
+            todoDao.getTodoById(id)?.toModel()
+        }
+    }
 }

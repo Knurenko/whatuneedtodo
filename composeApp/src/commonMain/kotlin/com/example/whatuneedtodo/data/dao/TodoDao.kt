@@ -25,4 +25,7 @@ interface TodoDao {
 
     @Query("SELECT EXISTS(SELECT 1 FROM todos WHERE title = :title)")
     suspend fun isTitleAlreadyExist(title: String): Boolean
+
+    @Query("SELECT * FROM todos WHERE id = :id")
+    suspend fun getTodoById(id: Int): TodoEntity?
 }
