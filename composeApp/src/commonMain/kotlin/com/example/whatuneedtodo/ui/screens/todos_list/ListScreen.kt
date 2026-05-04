@@ -71,6 +71,8 @@ fun ListScreen(
 
     Scaffold(
         modifier = Modifier
+            .statusBarsPadding()
+            .navigationBarsPadding()
             .fillMaxSize()
             .pointerInput(Unit) {
                 detectTapGestures(onTap = { focusManager.clearFocus() })
@@ -319,18 +321,14 @@ private fun TodoItemRow(
                     val offset = if (state.offset.isNaN()) 0f else state.offset
                     IntOffset(offset.roundToInt(), 0)
                 }
-                .padding(horizontal = 16.dp)
-                .combinedClickable(
-                    onClick = { /* details / edit — coming soon */ },
-                    onLongClick = { showContextMenu = true }
-                ),
+                .padding(horizontal = 16.dp),
             shape = RoundedCornerShape(16.dp),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.surface
             ),
             elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
         ) {
-            TodoItemContent(item)
+            TodoItemContent(item, onLongPress = { showContextMenu = true })
         }
 
         ItemContextMenu(
@@ -349,10 +347,14 @@ private fun TodoItemRow(
 }
 
 @Composable
-private fun TodoItemContent(item: TodoModel) {
+private fun TodoItemContent(item: TodoModel, onLongPress: () -> Unit) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .combinedClickable(
+                onClick = { /* details / edit — coming soon */ },
+                onLongClick = onLongPress
+            )
             .padding(12.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
